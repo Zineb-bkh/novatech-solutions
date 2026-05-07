@@ -54,3 +54,7 @@ novatech-candidatures/
 - [n8n](https://n8n.io/) — Workflow automation
 - Gmail OAuth2 — Envoi d'emails
 - JavaScript (Code nodes) — Logique métier & génération HTML
+
+
+
+# Réaliser par : Zineb Boukhou - CDL - LAAYOUNE
