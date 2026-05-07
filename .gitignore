@@ -1,0 +1,24 @@
+# SECRETS — NE JAMAIS PUSH
+.env
+.env.local
+.env.production
+*.env
+
+# DONNÉES PERSONNELLES
+backend/uploads/
+
+# DÉPENDANCES
+node_modules/
+frontend/.next/
+backend/node_modules/
+frontend/node_modules/
+
+# OS / ÉDITEURS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# LOGS & DEBUG
+*.log
+npm-debug.log*
