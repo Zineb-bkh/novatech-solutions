@@ -12,10 +12,7 @@
       "name": "Webhook — Nouvelle Candidature",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [
-        -240,
-        192
-      ],
+      "position": [-240, 192],
       "webhookId": "new-candidate"
     },
     {
@@ -28,23 +25,17 @@
       "name": "Répondre 200 OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [
-        0,
-        0
-      ]
+      "position": [0, 0]
     },
     {
       "parameters": {
-        "jsCode": "// ── Extraire et normaliser les données du candidat ──────────────────────\nconst body = $input.first().json.body || $input.first().json;\n\nconst score        = parseInt(body.score)        || 0;\nconst category     = body.category               || 'Non évalué';\nconst recommendation = body.recommendation       || '';\nconst feedback     = body.feedback               || '';\nconst firstName    = body.firstName              || '';\nconst lastName     = body.lastName               || '';\nconst email        = body.email                  || '';\nconst phone        = body.phone                  || 'Non renseigné';\nconst jobPosition  = body.jobPosition            || 'Non précisé';\nconst jobType      = body.jobType                || 'emploi';\nconst skills       = body.skills                 || 'Non précisées';\nconst education    = body.education              || 'Non précisée';\nconst school       = body.school                 || '';\nconst filiere      = body.filiere                || '';\nconst duration     = body.duration               || '';\nconst coverLetter  = body.coverLetter            || 'Non fournie';\nconst applicationId = body.applicationId         || 0;\nconst submittedAt  = body.submittedAt            || new Date().toISOString();\nconst cvFileName   = body.cvFileName             || '';\n\n// Classification du candidat\nconst isShortlisted = score >= 70;\nconst isStage       = jobType === 'stage';\n\n// Badge couleur selon score\nlet scoreColor, scoreBg, scoreBadge;\nif (score >= 80)      { scoreColor = '#15803d'; scoreBg = '#dcfce7'; scoreBadge = '🟢 Excellent'; }\nelse if (score >= 70) { scoreColor = '#1d4ed8'; scoreBg = '#dbeafe'; scoreBadge = '🔵 Bon'; }\nelse if (score >= 50) { scoreColor = '#b45309'; scoreBg = '#fef3c7'; scoreBadge = '🟡 Moyen'; }\nelse                  { scoreColor = '#b91c1c'; scoreBg = '#fee2e2'; scoreBadge = '🔴 Insuffisant'; }\n\nreturn [{\n  json: {\n    // Données brutes\n    applicationId, firstName, lastName, email, phone,\n    jobPosition, jobType, skills, education,\n    school, filiere, duration, coverLetter, cvFileName,\n    submittedAt,\n    // Résultat IA\n    score, category, recommendation, feedback,\n    // Computed\n    fullName: `${firstName} ${lastName}`,\n    isShortlisted,\n    isStage,\n    scoreColor, scoreBg, scoreBadge,\n    adminUrl: `http://localhost:3000/admin/applications`,\n    backendUrl: `http://localhost:5000`,\n    formattedDate: new Date(submittedAt).toLocaleDateString('fr-FR', {\n      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'\n    }),\n    formattedTime: new Date(submittedAt).toLocaleTimeString('fr-FR', {\n      hour: '2-digit', minute: '2-digit'\n    })\n  }\n}];"
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\nconst score        = parseInt(body.score)        || 0;\nconst category     = body.category               || 'Non évalué';\nconst recommendation = body.recommendation       || '';\nconst feedback     = body.feedback               || '';\nconst firstName    = body.firstName              || '';\nconst lastName     = body.lastName               || '';\nconst email        = body.email                  || '';\nconst phone        = body.phone                  || 'Non renseigné';\nconst jobPosition  = body.jobPosition            || 'Non précisé';\nconst jobType      = body.jobType                || 'emploi';\nconst skills       = body.skills                 || 'Non précisées';\nconst education    = body.education              || 'Non précisée';\nconst school       = body.school                 || '';\nconst filiere      = body.filiere                || '';\nconst duration     = body.duration               || '';\nconst coverLetter  = body.coverLetter            || 'Non fournie';\nconst applicationId = body.applicationId         || 0;\nconst submittedAt  = body.submittedAt            || new Date().toISOString();\nconst cvFileName   = body.cvFileName             || '';\n\nconst isShortlisted = score >= 70;\nconst isStage       = jobType === 'stage';\n\nlet scoreColor, scoreBg, scoreBadge;\nif (score >= 80)      { scoreColor = '#15803d'; scoreBg = '#dcfce7'; scoreBadge = '🟢 Excellent'; }\nelse if (score >= 70) { scoreColor = '#1d4ed8'; scoreBg = '#dbeafe'; scoreBadge = '🔵 Bon'; }\nelse if (score >= 50) { scoreColor = '#b45309'; scoreBg = '#fef3c7'; scoreBadge = '🟡 Moyen'; }\nelse                  { scoreColor = '#b91c1c'; scoreBg = '#fee2e2'; scoreBadge = '🔴 Insuffisant'; }\n\nreturn [{\n  json: {\n    applicationId, firstName, lastName, email, phone,\n    jobPosition, jobType, skills, education,\n    school, filiere, duration, coverLetter, cvFileName,\n    submittedAt,\n    score, category, recommendation, feedback,\n    fullName: `${firstName} ${lastName}`,\n    isShortlisted,\n    isStage,\n    scoreColor, scoreBg, scoreBadge,\n    adminUrl: `http://localhost:3000/admin/applications`,\n    backendUrl: `http://localhost:5000`,\n    formattedDate: new Date(submittedAt).toLocaleDateString('fr-FR', {\n      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'\n    }),\n    formattedTime: new Date(submittedAt).toLocaleTimeString('fr-FR', {\n      hour: '2-digit', minute: '2-digit'\n    })\n  }\n}];"
       },
       "id": "9ce32ede-39b6-4c88-910f-5db2921e5b40",
       "name": "Extraire & Normaliser les données",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        224,
-        192
-      ]
+      "position": [224, 192]
     },
     {
       "parameters": {
@@ -74,75 +65,57 @@
       "name": "Score ≥ 70 ? (Shortlist)",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [
-        512,
-        192
-      ]
+      "position": [512, 192]
     },
     {
       "parameters": {
-        "jsCode": "// ─── Générer HTML email ACCEPTATION (shortlist) ──────────────────────────────\nconst d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'stage' : \"d'emploi\";\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#f0f0ff;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:600px;margin:40px auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 48px rgba(79,70,229,0.15);\">\n\n  <!-- Header -->\n  <div style=\"background:linear-gradient(135deg,${accentColor},#7c3aed);padding:40px 32px;text-align:center;\">\n    <div style=\"font-size:3rem;margin-bottom:12px;\">🎉</div>\n    <h1 style=\"color:white;margin:0;font-size:1.8rem;font-weight:900;letter-spacing:-0.5px;\">NovaTech Solutions</h1>\n    <p style=\"color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:0.9rem;\">Vous êtes sélectionné(e) pour un entretien !</p>\n  </div>\n\n  <!-- Body -->\n  <div style=\"padding:36px 32px;background:#fff;\">\n    <p style=\"color:#374151;font-size:1rem;margin:0 0 16px;\">Bonjour <strong>${d.firstName}</strong>,</p>\n\n    <p style=\"color:#374151;line-height:1.7;margin:0 0 20px;\">\n      Excellente nouvelle ! Votre candidature ${typeLabel} pour le poste de\n      <strong style=\"color:${accentColor};\">${d.jobPosition}</strong>\n      a retenu toute notre attention. Vous faites partie des candidats <strong>shortlistés</strong> par notre système d'analyse IA.\n    </p>\n\n    <!-- Score Block -->\n    <div style=\"background:${d.scoreBg};border-radius:16px;padding:24px;margin:24px 0;text-align:center;border:2px solid ${d.scoreColor}33;\">\n      <div style=\"font-size:3rem;font-weight:900;color:${d.scoreColor};letter-spacing:-2px;\">${d.score}<span style=\"font-size:1.2rem;opacity:0.6;\">/100</span></div>\n      <div style=\"font-size:0.75rem;font-weight:700;color:${d.scoreColor};text-transform:uppercase;letter-spacing:2px;margin:6px 0;\">${d.category}</div>\n      ${d.feedback ? `<p style=\"margin:14px 0 0;font-size:0.875rem;color:#374151;font-style:italic;border-top:1px solid ${d.scoreColor}22;padding-top:12px;line-height:1.6;\">&ldquo;${d.feedback}&rdquo;</p>` : ''}\n    </div>\n\n    <!-- Next steps -->\n    <div style=\"background:#f0fdf4;border-radius:12px;padding:20px;border-left:4px solid #22c55e;margin-bottom:24px;\">\n      <p style=\"color:#15803d;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;\">✅ Prochaines étapes</p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ Notre équipe vous contactera dans les <strong>48 heures</strong></p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ Préparez vos projets et exemples de code</p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ L'entretien sera technique + RH (45 min)</p>\n    </div>\n\n    <div style=\"text-align:center;margin-top:24px;\">\n      <p style=\"color:#6b7280;font-size:0.875rem;\">Des questions ? Répondez directement à cet email.</p>\n    </div>\n  </div>\n\n  <!-- Footer -->\n  <div style=\"background:#f8f7ff;padding:20px 32px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#4f46e5;font-weight:700;font-size:0.875rem;margin:0;\">NovaTech Solutions</p>\n    <p style=\"color:#9ca3af;font-size:0.75rem;margin:6px 0 0;\">Transforming Digital Vision Into Reality</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, emailHtml: html, emailSubject: `🎉 Sélectionné(e) pour un entretien — ${d.jobPosition} | NovaTech` } }];"
+        "jsCode": "const d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'stage' : \"d'emploi\";\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#f0f0ff;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:600px;margin:40px auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 48px rgba(79,70,229,0.15);\">\n\n  <div style=\"background:linear-gradient(135deg,${accentColor},#7c3aed);padding:40px 32px;text-align:center;\">\n    <div style=\"font-size:3rem;margin-bottom:12px;\">🎉</div>\n    <h1 style=\"color:white;margin:0;font-size:1.8rem;font-weight:900;letter-spacing:-0.5px;\">NovaTech Solutions</h1>\n    <p style=\"color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:0.9rem;\">Vous êtes sélectionné(e) pour un entretien !</p>\n  </div>\n\n  <div style=\"padding:36px 32px;background:#fff;\">\n    <p style=\"color:#374151;font-size:1rem;margin:0 0 16px;\">Bonjour <strong>${d.firstName}</strong>,</p>\n\n    <p style=\"color:#374151;line-height:1.7;margin:0 0 20px;\">\n      Excellente nouvelle ! Votre candidature ${typeLabel} pour le poste de\n      <strong style=\"color:${accentColor};\">${d.jobPosition}</strong>\n      a retenu toute notre attention. Vous faites partie des candidats <strong>shortlistés</strong> par notre système d'analyse IA.\n    </p>\n\n    <div style=\"background:${d.scoreBg};border-radius:16px;padding:24px;margin:24px 0;text-align:center;border:2px solid ${d.scoreColor}33;\">\n      <div style=\"font-size:3rem;font-weight:900;color:${d.scoreColor};letter-spacing:-2px;\">${d.score}<span style=\"font-size:1.2rem;opacity:0.6;\">/100</span></div>\n      <div style=\"font-size:0.75rem;font-weight:700;color:${d.scoreColor};text-transform:uppercase;letter-spacing:2px;margin:6px 0;\">${d.category}</div>\n      ${d.feedback ? `<p style=\"margin:14px 0 0;font-size:0.875rem;color:#374151;font-style:italic;border-top:1px solid ${d.scoreColor}22;padding-top:12px;line-height:1.6;\">&ldquo;${d.feedback}&rdquo;</p>` : ''}\n    </div>\n\n    <div style=\"background:#f0fdf4;border-radius:12px;padding:20px;border-left:4px solid #22c55e;margin-bottom:24px;\">\n      <p style=\"color:#15803d;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;\">✅ Prochaines étapes</p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ Notre équipe vous contactera dans les <strong>48 heures</strong></p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ Préparez vos projets et exemples de code</p>\n      <p style=\"color:#166534;font-size:0.875rem;margin:4px 0;\">→ L'entretien sera technique + RH (45 min)</p>\n    </div>\n\n    <div style=\"text-align:center;margin-top:24px;\">\n      <p style=\"color:#6b7280;font-size:0.875rem;\">Des questions ? Répondez directement à cet email.</p>\n    </div>\n  </div>\n\n  <div style=\"background:#f8f7ff;padding:20px 32px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#4f46e5;font-weight:700;font-size:0.875rem;margin:0;\">NovaTech Solutions</p>\n    <p style=\"color:#9ca3af;font-size:0.75rem;margin:6px 0 0;\">Transforming Digital Vision Into Reality</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, emailHtml: html, emailSubject: `🎉 Sélectionné(e) pour un entretien — ${d.jobPosition} | NovaTech` } }];"
       },
       "id": "8c729b4d-a593-40ae-8822-84f3e529ea63",
       "name": "Générer HTML — Email Acceptation",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        784,
-        0
-      ]
+      "position": [784, 0]
     },
     {
       "parameters": {
-        "jsCode": "// ─── Générer HTML email REFUS (score < 70) ───────────────────────────────────\nconst d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'de stage' : \"d'emploi\";\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#f4f4f8;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:600px;margin:40px auto;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);\">\n\n  <!-- Header -->\n  <div style=\"background:linear-gradient(135deg,#475569,#334155);padding:36px 32px;text-align:center;\">\n    <div style=\"font-size:2.5rem;margin-bottom:10px;\">📋</div>\n    <h1 style=\"color:white;margin:0;font-size:1.6rem;font-weight:800;\">NovaTech Solutions</h1>\n    <p style=\"color:rgba(255,255,255,0.75);margin:6px 0 0;font-size:0.85rem;\">Réponse à votre candidature ${typeLabel}</p>\n  </div>\n\n  <!-- Body -->\n  <div style=\"padding:36px 32px;background:#fff;\">\n    <p style=\"color:#374151;font-size:1rem;margin:0 0 16px;\">Bonjour <strong>${d.firstName}</strong>,</p>\n\n    <p style=\"color:#4b5563;line-height:1.7;margin:0 0 20px;\">\n      Nous avons examiné avec soin votre candidature ${typeLabel} pour le poste de\n      <strong style=\"color:${accentColor};\">${d.jobPosition}</strong>.\n      Après analyse approfondie de votre profil, nous ne sommes malheureusement pas en mesure\n      de donner suite à votre candidature pour cette offre à ce stade.\n    </p>\n\n    ${d.feedback ? `\n    <!-- Feedback IA -->\n    <div style=\"background:#f8fafc;border-radius:12px;padding:20px;margin:20px 0;border-left:4px solid #94a3b8;\">\n      <p style=\"color:#64748b;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;\">💡 Retour personnalisé</p>\n      <p style=\"color:#475569;font-size:0.875rem;line-height:1.6;font-style:italic;margin:0;\">&ldquo;${d.feedback}&rdquo;</p>\n    </div>` : ''}\n\n    <!-- Encouragement -->\n    <div style=\"background:#eff6ff;border-radius:12px;padding:20px;border-left:4px solid ${accentColor};margin-bottom:24px;\">\n      <p style=\"color:#1d4ed8;font-weight:700;font-size:0.85rem;margin:0 0 10px;\">🚀 Continuez à progresser</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ Restez à l'affût de nos futures offres sur notre site</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ Enrichissez votre profil GitHub avec des projets concrets</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ N'hésitez pas à repostuler dans 6 mois</p>\n    </div>\n\n    <p style=\"color:#9ca3af;font-size:0.8rem;text-align:center;\">\n      Nous vous souhaitons plein succès dans votre recherche.\n    </p>\n  </div>\n\n  <!-- Footer -->\n  <div style=\"background:#f8f7ff;padding:20px 32px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#4f46e5;font-weight:700;font-size:0.875rem;margin:0;\">NovaTech Solutions</p>\n    <p style=\"color:#9ca3af;font-size:0.75rem;margin:6px 0 0;\">Transforming Digital Vision Into Reality</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, emailHtml: html, emailSubject: `NovaTech Solutions — Réponse à votre candidature pour ${d.jobPosition}` } }];"
+        "jsCode": "const d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'de stage' : \"d'emploi\";\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#f4f4f8;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:600px;margin:40px auto;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);\">\n\n  <div style=\"background:linear-gradient(135deg,#475569,#334155);padding:36px 32px;text-align:center;\">\n    <div style=\"font-size:2.5rem;margin-bottom:10px;\">📋</div>\n    <h1 style=\"color:white;margin:0;font-size:1.6rem;font-weight:800;\">NovaTech Solutions</h1>\n    <p style=\"color:rgba(255,255,255,0.75);margin:6px 0 0;font-size:0.85rem;\">Réponse à votre candidature ${typeLabel}</p>\n  </div>\n\n  <div style=\"padding:36px 32px;background:#fff;\">\n    <p style=\"color:#374151;font-size:1rem;margin:0 0 16px;\">Bonjour <strong>${d.firstName}</strong>,</p>\n\n    <p style=\"color:#4b5563;line-height:1.7;margin:0 0 20px;\">\n      Nous avons examiné avec soin votre candidature ${typeLabel} pour le poste de\n      <strong style=\"color:${accentColor};\">${d.jobPosition}</strong>.\n      Après analyse approfondie de votre profil, nous ne sommes malheureusement pas en mesure\n      de donner suite à votre candidature pour cette offre à ce stade.\n    </p>\n\n    ${d.feedback ? `\n    <div style=\"background:#f8fafc;border-radius:12px;padding:20px;margin:20px 0;border-left:4px solid #94a3b8;\">\n      <p style=\"color:#64748b;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 8px;\">💡 Retour personnalisé</p>\n      <p style=\"color:#475569;font-size:0.875rem;line-height:1.6;font-style:italic;margin:0;\">&ldquo;${d.feedback}&rdquo;</p>\n    </div>` : ''}\n\n    <div style=\"background:#eff6ff;border-radius:12px;padding:20px;border-left:4px solid ${accentColor};margin-bottom:24px;\">\n      <p style=\"color:#1d4ed8;font-weight:700;font-size:0.85rem;margin:0 0 10px;\">🚀 Continuez à progresser</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ Restez à l'affût de nos futures offres sur notre site</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ Enrichissez votre profil GitHub avec des projets concrets</p>\n      <p style=\"color:#1e40af;font-size:0.875rem;margin:4px 0;\">→ N'hésitez pas à repostuler dans 6 mois</p>\n    </div>\n\n    <p style=\"color:#9ca3af;font-size:0.8rem;text-align:center;\">\n      Nous vous souhaitons plein succès dans votre recherche.\n    </p>\n  </div>\n\n  <div style=\"background:#f8f7ff;padding:20px 32px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#4f46e5;font-weight:700;font-size:0.875rem;margin:0;\">NovaTech Solutions</p>\n    <p style=\"color:#9ca3af;font-size:0.75rem;margin:6px 0 0;\">Transforming Digital Vision Into Reality</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, emailHtml: html, emailSubject: `NovaTech Solutions — Réponse à votre candidature pour ${d.jobPosition}` } }];"
       },
       "id": "2e05919a-c9d2-4a5e-bcc9-935819819786",
       "name": "Générer HTML — Email Refus",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        784,
-        368
-      ]
+      "position": [784, 368]
     },
     {
       "parameters": {
-        "jsCode": "// ─── Générer email admin shortlist ───────────────────────────────────────────\nconst d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'Stage' : 'Emploi';\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"></head>\n<body style=\"margin:0;padding:0;background:#f0f0ff;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:640px;margin:32px auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(79,70,229,0.12);\">\n  <div style=\"background:linear-gradient(135deg,${accentColor},#7c3aed);padding:28px 28px;\">\n    <div style=\"display:flex;align-items:center;gap:12px;\">\n      <span style=\"font-size:2rem;\">🏆</span>\n      <div>\n        <h1 style=\"color:white;margin:0;font-size:1.3rem;font-weight:800;\">Nouveau candidat shortlisté !</h1>\n        <p style=\"color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:0.8rem;\">NovaTech — Système de gestion des candidatures</p>\n      </div>\n    </div>\n  </div>\n\n  <div style=\"padding:28px;background:white;\">\n\n    <!-- Candidat info -->\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:20px;\">\n      <tr>\n        <td style=\"padding:10px 14px;background:#f8f7ff;border-radius:10px 10px 0 0;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:${accentColor};text-transform:uppercase;letter-spacing:1px;\">Candidat</span><br>\n          <strong style=\"color:#111827;font-size:1rem;\">${d.fullName}</strong>\n        </td>\n        <td style=\"padding:10px 14px;background:#f8f7ff;border-radius:10px 10px 0 0;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:${accentColor};text-transform:uppercase;letter-spacing:1px;\">Type</span><br>\n          <strong style=\"color:#111827;\">${typeLabel}</strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Email</span><br>\n          <a href=\"mailto:${d.email}\" style=\"color:${accentColor};\">${d.email}</a>\n        </td>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Téléphone</span><br>\n          <span style=\"color:#374151;\">${d.phone}</span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Poste</span><br>\n          <strong style=\"color:#374151;\">${d.jobPosition}</strong>\n        </td>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Reçue le</span><br>\n          <span style=\"color:#374151;\">${d.formattedDate}</span>\n        </td>\n      </tr>\n    </table>\n\n    <!-- Score -->\n    <div style=\"background:${d.scoreBg};border-radius:14px;padding:20px;margin:20px 0;display:flex;align-items:center;gap:20px;\">\n      <div style=\"text-align:center;min-width:80px;\">\n        <div style=\"font-size:2.5rem;font-weight:900;color:${d.scoreColor};letter-spacing:-1px;\">${d.score}</div>\n        <div style=\"font-size:0.65rem;font-weight:700;color:${d.scoreColor};text-transform:uppercase;letter-spacing:1px;\">/ 100</div>\n      </div>\n      <div style=\"flex:1;border-left:2px solid ${d.scoreColor}33;padding-left:18px;\">\n        <div style=\"font-weight:700;color:${d.scoreColor};font-size:0.9rem;\">${d.scoreBadge}</div>\n        <div style=\"color:#4b5563;font-size:0.8rem;margin-top:4px;\">${d.recommendation}</div>\n      </div>\n    </div>\n\n    <!-- CTA Admin -->\n    <div style=\"text-align:center;margin-top:24px;\">\n      <a href=\"${d.adminUrl}\" style=\"display:inline-block;background:linear-gradient(135deg,${accentColor},#7c3aed);color:white;padding:14px 36px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;\"\n      >Voir dans l'admin NovaTech →</a>\n    </div>\n  </div>\n\n  <div style=\"background:#f8f7ff;padding:16px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#9ca3af;font-size:0.72rem;margin:0;\">NovaTech Solutions — Workflow automatique Sujet 5 PFE</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, adminEmailHtml: html } }];"
+        "jsCode": "const d = $input.first().json;\nconst accentColor = d.isStage ? '#7c3aed' : '#4f46e5';\nconst typeLabel   = d.isStage ? 'Stage' : 'Emploi';\n\nconst html = `<!DOCTYPE html>\n<html lang=\"fr\">\n<head><meta charset=\"UTF-8\"></head>\n<body style=\"margin:0;padding:0;background:#f0f0ff;font-family:'Segoe UI',Arial,sans-serif;\">\n<div style=\"max-width:640px;margin:32px auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(79,70,229,0.12);\">\n  <div style=\"background:linear-gradient(135deg,${accentColor},#7c3aed);padding:28px 28px;\">\n    <div style=\"display:flex;align-items:center;gap:12px;\">\n      <span style=\"font-size:2rem;\">🏆</span>\n      <div>\n        <h1 style=\"color:white;margin:0;font-size:1.3rem;font-weight:800;\">Nouveau candidat shortlisté !</h1>\n        <p style=\"color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:0.8rem;\">NovaTech — Système de gestion des candidatures</p>\n      </div>\n    </div>\n  </div>\n\n  <div style=\"padding:28px;background:white;\">\n\n    <table style=\"width:100%;border-collapse:collapse;margin-bottom:20px;\">\n      <tr>\n        <td style=\"padding:10px 14px;background:#f8f7ff;border-radius:10px 10px 0 0;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:${accentColor};text-transform:uppercase;letter-spacing:1px;\">Candidat</span><br>\n          <strong style=\"color:#111827;font-size:1rem;\">${d.fullName}</strong>\n        </td>\n        <td style=\"padding:10px 14px;background:#f8f7ff;border-radius:10px 10px 0 0;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:${accentColor};text-transform:uppercase;letter-spacing:1px;\">Type</span><br>\n          <strong style=\"color:#111827;\">${typeLabel}</strong>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Email</span><br>\n          <a href=\"mailto:${d.email}\" style=\"color:${accentColor};\">${d.email}</a>\n        </td>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Téléphone</span><br>\n          <span style=\"color:#374151;\">${d.phone}</span>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Poste</span><br>\n          <strong style=\"color:#374151;\">${d.jobPosition}</strong>\n        </td>\n        <td style=\"padding:10px 14px;border-bottom:1px solid #e5e7eb;\">\n          <span style=\"font-size:0.7rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;\">Reçue le</span><br>\n          <span style=\"color:#374151;\">${d.formattedDate}</span>\n        </td>\n      </tr>\n    </table>\n\n    <div style=\"background:${d.scoreBg};border-radius:14px;padding:20px;margin:20px 0;display:flex;align-items:center;gap:20px;\">\n      <div style=\"text-align:center;min-width:80px;\">\n        <div style=\"font-size:2.5rem;font-weight:900;color:${d.scoreColor};letter-spacing:-1px;\">${d.score}</div>\n        <div style=\"font-size:0.65rem;font-weight:700;color:${d.scoreColor};text-transform:uppercase;letter-spacing:1px;\">/ 100</div>\n      </div>\n      <div style=\"flex:1;border-left:2px solid ${d.scoreColor}33;padding-left:18px;\">\n        <div style=\"font-weight:700;color:${d.scoreColor};font-size:0.9rem;\">${d.scoreBadge}</div>\n        <div style=\"color:#4b5563;font-size:0.8rem;margin-top:4px;\">${d.recommendation}</div>\n      </div>\n    </div>\n\n    <div style=\"text-align:center;margin-top:24px;\">\n      <a href=\"${d.adminUrl}\" style=\"display:inline-block;background:linear-gradient(135deg,${accentColor},#7c3aed);color:white;padding:14px 36px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;\"\n      >Voir dans l'admin NovaTech →</a>\n    </div>\n  </div>\n\n  <div style=\"background:#f8f7ff;padding:16px;text-align:center;border-top:1px solid #e5e7eb;\">\n    <p style=\"color:#9ca3af;font-size:0.72rem;margin:0;\">NovaTech Solutions — Workflow automatique Sujet 5 PFE</p>\n  </div>\n</div>\n</body></html>`;\n\nreturn [{ json: { ...d, adminEmailHtml: html } }];"
       },
       "id": "be8c4409-66e3-46e4-9462-808f8f3b49ff",
       "name": "Générer HTML — Email Admin Shortlist",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1072,
-        160
-      ]
+      "position": [1072, 160]
     },
     {
       "parameters": {
-        "jsCode": "// ─── Sauvegarder la candidature dans le backend NovaTech via PATCH status ────\n// Le backend a déjà sauvegardé la candidature en DB.\n// Ce nœud met à jour le statut selon le score IA.\nconst d = $input.first().json;\nconst newStatus = d.isShortlisted ? 'reviewed' : 'pending';\n\nreturn [{ json: { ...d, computedStatus: newStatus, savedToDb: true, note: `Statut mis à jour: ${newStatus}` } }];"
+        "jsCode": "const d = $input.first().json;\nconst newStatus = d.isShortlisted ? 'reviewed' : 'pending';\n\nreturn [{ json: { ...d, computedStatus: newStatus, savedToDb: true, note: `Statut mis à jour: ${newStatus}` } }];"
       },
       "id": "dc667652-01c8-4e95-90a4-f9f83f1d367a",
       "name": "Sauvegarde DB — Statut mis à jour",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1344,
-        368
-      ]
+      "position": [1344, 368]
     },
     {
       "parameters": {
-        "jsCode": "// ─── Log final du workflow ────────────────────────────────────────────────────\nconst d = $input.first().json;\nconsole.log(`[NovaTech Workflow] Traitement terminé pour ${d.fullName}`);\nconsole.log(`Score: ${d.score}/100 | Shortlist: ${d.isShortlisted} | Status: ${d.computedStatus}`);\n\nreturn [{ json: {\n  success: true,\n  candidat: d.fullName,\n  email: d.email,\n  score: d.score,\n  shortlisted: d.isShortlisted,\n  status: d.computedStatus,\n  processedAt: new Date().toISOString()\n} }];"
+        "jsCode": "const d = $input.first().json;\nconsole.log(`[NovaTech Workflow] Traitement terminé pour ${d.fullName}`);\nconsole.log(`Score: ${d.score}/100 | Shortlist: ${d.isShortlisted} | Status: ${d.computedStatus}`);\n\nreturn [{ json: {\n  success: true,\n  candidat: d.fullName,\n  email: d.email,\n  score: d.score,\n  shortlisted: d.isShortlisted,\n  status: d.computedStatus,\n  processedAt: new Date().toISOString()\n} }];"
       },
       "id": "167667f4-c9b3-490e-bfc1-877ba74f3b78",
       "name": "Log Final — Workflow Terminé ✓",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1632,
-        272
-      ]
+      "position": [1632, 272]
     },
     {
       "parameters": {
@@ -155,10 +128,7 @@
       "name": "Email Admin — Shortlist",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2,
-      "position": [
-        1344,
-        160
-      ],
+      "position": [1344, 160],
       "webhookId": "9405df4d-d60b-42c3-898d-421138275c9f",
       "credentials": {
         "gmailOAuth2": {
@@ -178,10 +148,7 @@
       "name": "Email Candidat — Sélectionné",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2,
-      "position": [
-        1072,
-        0
-      ],
+      "position": [1072, 0],
       "webhookId": "827c3fb7-d453-42b4-8273-d08e21fbc017",
       "credentials": {
         "gmailOAuth2": {
@@ -201,10 +168,7 @@
       "name": "Email Candidat — Refusé",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2,
-      "position": [
-        1072,
-        368
-      ],
+      "position": [1072, 368],
       "webhookId": "7d81f1d6-c18c-4cc9-a187-77c81161ebb4",
       "credentials": {
         "gmailOAuth2": {
@@ -219,122 +183,58 @@
     "Webhook — Nouvelle Candidature": {
       "main": [
         [
-          {
-            "node": "Répondre 200 OK",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Extraire & Normaliser les données",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Répondre 200 OK", "type": "main", "index": 0 },
+          { "node": "Extraire & Normaliser les données", "type": "main", "index": 0 }
         ]
       ]
     },
     "Extraire & Normaliser les données": {
       "main": [
-        [
-          {
-            "node": "Score ≥ 70 ? (Shortlist)",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Score ≥ 70 ? (Shortlist)", "type": "main", "index": 0 }]
       ]
     },
     "Score ≥ 70 ? (Shortlist)": {
       "main": [
         [
-          {
-            "node": "Générer HTML — Email Acceptation",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Générer HTML — Email Admin Shortlist",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Générer HTML — Email Acceptation", "type": "main", "index": 0 },
+          { "node": "Générer HTML — Email Admin Shortlist", "type": "main", "index": 0 }
         ],
         [
-          {
-            "node": "Générer HTML — Email Refus",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Générer HTML — Email Refus", "type": "main", "index": 0 }
         ]
       ]
     },
     "Générer HTML — Email Acceptation": {
       "main": [
-        [
-          {
-            "node": "Email Candidat — Sélectionné",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Email Candidat — Sélectionné", "type": "main", "index": 0 }]
       ]
     },
     "Générer HTML — Email Refus": {
       "main": [
         [
-          {
-            "node": "Email Candidat — Refusé",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Sauvegarde DB — Statut mis à jour",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "Email Candidat — Refusé", "type": "main", "index": 0 },
+          { "node": "Sauvegarde DB — Statut mis à jour", "type": "main", "index": 0 }
         ]
       ]
     },
     "Générer HTML — Email Admin Shortlist": {
       "main": [
-        [
-          {
-            "node": "Email Admin — Shortlist",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Email Admin — Shortlist", "type": "main", "index": 0 }]
       ]
     },
     "Sauvegarde DB — Statut mis à jour": {
       "main": [
-        [
-          {
-            "node": "Log Final — Workflow Terminé ✓",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Log Final — Workflow Terminé ✓", "type": "main", "index": 0 }]
       ]
     },
     "Email Admin — Shortlist": {
       "main": [
-        [
-          {
-            "node": "Sauvegarde DB — Statut mis à jour",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Sauvegarde DB — Statut mis à jour", "type": "main", "index": 0 }]
       ]
     },
     "Email Candidat — Sélectionné": {
       "main": [
-        [
-          {
-            "node": "Sauvegarde DB — Statut mis à jour",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Sauvegarde DB — Statut mis à jour", "type": "main", "index": 0 }]
       ]
     }
   },
